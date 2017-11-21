@@ -99,12 +99,14 @@
     src: "{{ container_images_download_template }}"
     dest: "{{ container_images_download_script }}"
     mode: 0775
+    force: no
 
 - name: create registry environment file script
   template:
     src: "{{ local_docker_registry_env_template }}"
     dest: "{{ local_docker_registry_env_script }}"
     mode: 0775
+    force: no
 
 - name: Check if overcoud deployed with pacemaker
   shell: grep "\-pacemaker" "{{ overcloud_deploy_script }}"
