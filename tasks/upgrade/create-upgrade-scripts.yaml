@@ -44,6 +44,13 @@
     replace: environments/storage-environment-external.yaml
   when: not upstream_container_images|bool
 
+- name: Replace baremetal environment file to containerized used in OOOQ
+  replace:
+    dest: "{{ overcloud_deploy_script }}"
+    regexp: ci/environments/(\w+).yaml
+    replace: ci/environments/\1-containers.yaml
+  when: tripleo_ci
+
 - name: Convert Ceph parameters to ceph ansible
   include: convert_ceph_params.yaml
 
