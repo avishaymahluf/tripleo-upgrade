@@ -19,12 +19,13 @@ openstack overcloud container image prepare \
 {% else %}
 REPO="$(find /etc/yum.repos.d/ -iname 'rhos-release-??.*')"
 REPO_URL="$(grep -B2 enabled=1 $REPO | grep -m1 puddle | sed -E 's/.*(http.*[0-9]-RHEL-.\/).*/\1/')"
-curl -L -o {{ container_images_location }} $REPO_URL/latest_containers/container_images.yaml
-TAG="$(awk -F':' '/imagename/ {print $NF; exit}' {{ container_images_location }})"
+curl -L -o {{ working_dir }}/overcloud_container_image_prepare.yaml $REPO_URL/latest/overcloud_container_image_prepare.yaml
+REGISTRY="$(grep -v ^# {{ working_dir }}/overcloud_container_image_prepare.yaml  | grep '  namespace' | awk -F': ' {'print $2'} | awk -F'/' {'print $1'})"
+sudo sed -i -E "s/(--insecure-registry.*)\"/\1\ --insecure-registry\ $REGISTRY\"/" /etc/sysconfig/docker
+sudo systemctl restart docker
+TAG="$(openstack overcloud container image tag discover --image $REGISTRY/rhosp12/openstack-base:latest --tag-from-label version-release | awk -F'-' {'print $2'})"
 {% if docker_registry_url != 'registry.example.local' %}
 REGISTRY='{{ docker_registry_url }}'
-{% else %}
-REGISTRY="$(grep pull_source {{ container_images_location }} | uniq | awk {'print $2'})"
 {% endif %}
 openstack overcloud container image prepare \
   --env-file={{ containers_default_parameters }} \
