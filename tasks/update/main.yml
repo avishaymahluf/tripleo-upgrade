@@ -28,6 +28,14 @@
   when: undercloud_update|bool
 
 - block:
+    - name: start l3 agent connectivity check
+      shell: |
+        source {{ overcloud_rc }}
+        {{ l3_agent_connectivity_check_start_script }}
+      when: l3_agent_connectivity_check
+      async: 21660
+      poll: 0
+
     - name: overcloud pre-update workarounds
       shell: |
           source {{ undercloud_rc }}
@@ -54,5 +62,11 @@
           source {{ undercloud_rc }}
           bash {{ post_overcloud_update_workarounds_script }} &> {{ working_dir }}/post_overcloud_update_workarounds.log
       when: updates_workarounds|bool
+
+    - name: stop l3 agent connectivity check
+      shell: |
+        source {{ overcloud_rc }}
+        {{ l3_agent_connectivity_check_stop_script }}
+      when: l3_agent_connectivity_check
 
   when: overcloud_update|bool
