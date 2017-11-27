@@ -53,7 +53,9 @@
     - name: update overcloud
       shell: |
           source {{ undercloud_rc }}
-          bash {{ overcloud_update_script }} &> {{ working_dir }}/overcloud_update.log
+          bash {{ overcloud_update_script_base }}-{{ item }}.sh &> {{ working_dir}}/oc-update-{{ item }}.log
+      with_items:
+          - "{{ oc_roles.stdout_lines|default('all') }}"
       tags:
           - overcloud_update
 
