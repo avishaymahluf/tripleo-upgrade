@@ -23,7 +23,7 @@ curl -L -o {{ working_dir }}/overcloud_container_image_prepare.yaml $REPO_URL/la
 REGISTRY="$(grep -v ^# {{ working_dir }}/overcloud_container_image_prepare.yaml  | grep '  namespace' | awk -F': ' {'print $2'} | awk -F'/' {'print $1'})"
 sudo sed -i -E "s/(--insecure-registry.*)\"/\1\ --insecure-registry\ $REGISTRY\"/" /etc/sysconfig/docker
 sudo systemctl restart docker
-TAG="$(openstack overcloud container image tag discover --image $REGISTRY/rhosp12/openstack-base:latest --tag-from-label version-release | awk -F'-' {'print $2'})"
+TAG="$(openstack overcloud container image tag discover --image $REGISTRY/rhosp12/openstack-base:latest --tag-from-label version-release)"
 {% if docker_registry_url != 'registry.example.local' %}
 REGISTRY='{{ docker_registry_url }}'
 {% endif %}
