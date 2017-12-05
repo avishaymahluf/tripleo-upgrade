@@ -152,7 +152,7 @@
     dest: "{{ working_dir }}/upgrade_hci.yaml"
   when: upgrade_hci|bool
 
-  - name: create the custom upgrade init commands
+- name: create the custom upgrade init commands
   template:
     src: "{{ upgrade_init_command_template }}"
     dest: "{{upgrade_init_command_dest}}"
