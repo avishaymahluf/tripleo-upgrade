@@ -174,8 +174,12 @@ with the correct parameters.
 Usage with InfraRed
 -----------------------------
 
-tripleo-upgrade comes preinstalled as an InfraRed plugin. After a successful InfraRed
-overcloud deployment you need to run the following steps to upgrade the deployment:
+tripleo-upgrade comes preinstalled as an InfraRed plugin. 
+In order to install it manually, the following InfraRed command should be used:
+
+    infrared plugin add https://github.com/redhat-openstack/tripleo-upgrade --src-path infrared_plugin
+
+After a successful InfraRed overcloud deployment you need to run the following steps to upgrade the deployment:
 
 Symlink roles path:
 
